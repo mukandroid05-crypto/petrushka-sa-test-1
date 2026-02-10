@@ -103,44 +103,45 @@
 
 ```mermaid
 flowchart LR
-  subgraph Mobile[Мобильное приложение]
-    APP[App] -->|получение token| SDK[FCM/APNs SDK]
-    APP -->|register token| BFF[BFF / API Gateway]
+  subgraph Mobile["Мобильное приложение"]
+    APP["App"] -->|получение token| SDK["FCM/APNs SDK"]
+    APP -->|register token| BFF["BFF / API Gateway"]
   end
 
-  subgraph Core[Backend (микросервисы)]
-    BFF --> TOK[Device Token Service]
-    BFF --> PREF[Preferences Service]
+  subgraph Core["Backend — микросервисы"]
+    BFF --> TOK["Device Token Service"]
+    BFF --> PREF["Preferences Service"]
 
-    subgraph Domain[Доменные сервисы]
-      CART[Cart Service]
-      ORDER[Order Service]
-      MKT[Marketing/Campaign Service]
+    subgraph Domain["Доменные сервисы"]
+      CART["Cart Service"]
+      ORDER["Order Service"]
+      MKT["Marketing/Campaign Service"]
     end
 
-    subgraph Bus[Event Bus]
-      MQ[(Kafka / RabbitMQ)]
+    subgraph Bus["Event Bus"]
+      MQ["Kafka / RabbitMQ"]
     end
 
     CART -->|CartIdleDetected| MQ
     ORDER -->|OrderCanceled| MQ
     MKT -->|CampaignSendRequested| MQ
 
-    MQ --> ORCH[Notification Orchestrator]
-    ORCH --> TMP[Template/Content Service]
+    MQ --> ORCH["Notification Orchestrator"]
+    ORCH --> TMP["Template/Content Service"]
     ORCH --> TOK
     ORCH --> PREF
 
-    ORCH --> SEND[Sender Service]
-    SEND --> LOG[(Notification Log / Outbox)]
+    ORCH --> SEND["Sender Service"]
+    SEND --> LOG["Notification Log / Outbox"]
   end
 
-  subgraph Providers[Push Providers]
-    FCM[Firebase Cloud Messaging]
-    APNS[Apple APNs]
+  subgraph Providers["Push Providers"]
+    FCM["Firebase Cloud Messaging"]
+    APNS["Apple APNs"]
   end
 
   SEND -->|push| FCM
   SEND -->|push| APNS
   FCM --> APP
   APNS --> APP
+
