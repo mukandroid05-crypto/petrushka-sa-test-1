@@ -10,4 +10,3 @@
 
 3) **Задание 3: Архитектура PUSH-уведомлений (микросервисы)**  
    → `docs/task3_push_architecture.md`
-Update README
